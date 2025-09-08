@@ -121,7 +121,11 @@ export default function Login() {
           <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
             <GraduationCap className="w-5 h-5 text-white" />
           </div>
+<<<<<<< HEAD
           <span className="font-medium">EduConnect</span>
+=======
+          <span className="font-medium">LearnCey</span>
+>>>>>>> feature/all-features
         </a>
       </div>
 
@@ -228,7 +232,11 @@ export default function Login() {
               type="submit"
               onClick={handleSubmit}
               disabled={isLoading}
+<<<<<<< HEAD
               className="group w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+=======
+              className="group w-full bg-gradient-to-r from-blue-600 to-purple-800 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-5 transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+>>>>>>> feature/all-features
             >
               {isLoading ? (
                 <>
