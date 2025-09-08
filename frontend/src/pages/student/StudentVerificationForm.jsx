@@ -1,0 +1,146 @@
+import { useState } from 'react';
+import API from '../../api';
+import { useNavigate } from 'react-router-dom';
+import FloatingParticles from '../../components/FloatingPartcles';
+
+const StudentVerificationForm = () => {
+  const [form, setForm] = useState({
+    phone: '',
+    gender: '',
+    country: '',
+    address: '',
+    dob: '',
+    profileImage: null,
+  });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'profileImage') {
+      setForm({ ...form, profileImage: files[0] });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = new FormData();
+      data.append('phone', form.phone);
+      data.append('gender', form.gender);
+      data.append('country', form.country);
+      data.append('address', form.address);
+      data.append('dob', form.dob);
+      if (form.profileImage) {
+        data.append('profileImage', form.profileImage);
+      }
+
+      await API.post('/student/profile', data);
+      navigate('/student');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Submission failed');
+    }
+  };
+
+//   return (
+//     <div className="max-w-md mx-auto p-6 bg-white shadow rounded mt-10">
+//       <h1 className="text-2xl font-semibold mb-4">Complete Your Profile</h1>
+//       {error && <p className="text-red-500">{error}</p>}
+//       <form onSubmit={handleSubmit} className="space-y-4">
+//         {['phone', 'gender', 'country', 'address', 'dob'].map((field) => (
+//           <div key={field}>
+//             <label className="block font-medium">
+//               {field.charAt(0).toUpperCase() + field.slice(1)} *
+//             </label>
+//             <input
+//               type={field === 'dob' ? 'date' : 'text'}
+//               name={field}
+//               required
+//               className="w-full border rounded p-2 mt-1"
+//               value={form[field]}
+//               onChange={handleChange}
+//             />
+//           </div>
+//         ))}
+
+//         <div>
+//           <label className="block font-medium">Profile Image</label>
+//           <input
+//             type="file"
+//             name="profileImage"
+//             accept="image/*"
+//             className="w-full mt-1"
+//             onChange={handleChange}
+//           />
+//         </div>
+
+//         <button className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+//           Submit
+//         </button>
+//       </form>
+//     </div>
+//   );
+return (
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center py-12 px-4 relative overflow-hidden">
+    <FloatingParticles />
+
+    {/* decorative orbs */}
+    <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
+    <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-r from-pink-400 to-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
+
+    <div className="relative z-10 w-full max-w-md mx-auto">
+      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Complete Your Profile
+        </h1>
+
+        {error && (
+          <p className="text-red-600 mb-4 text-sm text-center">{error}</p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {['phone', 'gender', 'country', 'address', 'dob'].map((field) => (
+            <div key={field}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {field.charAt(0).toUpperCase() + field.slice(1)} *
+              </label>
+              <input
+                type={field === 'dob' ? 'date' : 'text'}
+                name={field}
+                required
+                value={form[field]}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              />
+            </div>
+          ))}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Profile Image
+            </label>
+            <input
+              type="file"
+              name="profileImage"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-900 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all hover:shadow-lg"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+);
+};
+
+export default StudentVerificationForm;
