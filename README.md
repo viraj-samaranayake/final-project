@@ -1,4 +1,4 @@
-# 🎓 Online Learning Platform - MERN Stack MVC Web Application
+# 🎓 LearnCey Online Learning Platform - MERN Stack MVC Web Application
 
 A modern and feature-rich **Online Learning Platform** built using the **MERN Stack (MongoDB, Express.js, React, Node.js)** with **MVC architecture**. This application enables **Students**, **Tutors**, and **Admins** to interact within a secure and scalable online education ecosystem.
 
