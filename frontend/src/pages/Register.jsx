@@ -1,86 +1,3 @@
-// import { useState } from 'react';
-// import API from '../api';
-// import { useNavigate } from 'react-router-dom';
-// import useAuth from '../context/useAuth';
-
-// export default function Register() {
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-
-//   const [form, setForm] = useState({
-//     role: 'student',
-//     name: '',
-//     email: '',
-//     password: '',
-//   });
-//   const [error, setError] = useState('');
-
-//   const handleChange = (e) =>
-//     setForm({ ...form, [e.target.name]: e.target.value });
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError('');
-//     try {
-//       const res = await API.post('/auth/register', form);
-//       login(res.data); // store user/token in context + localStorage
-//       navigate(`/${res.data.role}`);
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Registration failed');
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-md mx-auto p-6">
-//       <h2 className="text-2xl font-bold mb-4">Register</h2>
-//       {error && <p className="text-red-500">{error}</p>}
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <select
-//           name="role"
-//           value={form.role}
-//           onChange={handleChange}
-//           className="w-full p-2 border rounded"
-//         >
-//           <option value="student">Student</option>
-//           <option value="tutor">Tutor</option>
-//         </select>
-//         <input
-//           name="name"
-//           placeholder="Full Name"
-//           value={form.name}
-//           onChange={handleChange}
-//           required
-//           className="w-full p-2 border rounded"
-//         />
-//         <input
-//           type="email"
-//           name="email"
-//           placeholder="Email"
-//           value={form.email}
-//           onChange={handleChange}
-//           required
-//           className="w-full p-2 border rounded"
-//         />
-//         <input
-//           type="password"
-//           name="password"
-//           placeholder="Password"
-//           value={form.password}
-//           onChange={handleChange}
-//           required
-//           className="w-full p-2 border rounded"
-//         />
-//         <button
-//           type="submit"
-//           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-//         >
-//           Register
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
 import {
   AlertCircle,
   ArrowRight,
@@ -123,9 +40,45 @@ export default function Register() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  function isStrongPassword(password) {
+    const lengthCheck = password.length >= 8;
+    const uppercaseCheck = /[A-Z]/.test(password);
+    const lowercaseCheck = /[a-z]/.test(password);
+    const numberCheck = /[0-9]/.test(password);
+    const specialCharCheck = /[^A-Za-z0-9]/.test(password);
+
+    return (
+      lengthCheck &&
+      uppercaseCheck &&
+      lowercaseCheck &&
+      numberCheck &&
+      specialCharCheck
+    );
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Check for empty fields
+    if (!form.name || !form.email || !form.password) {
+      setError('All fields are required.');
+      return;
+    }
+
+    // Validate name
+    const namePattern = /^[A-Za-z\s]+$/;
+    if (!namePattern.test(form.name)) {
+      setError('Name can only contain letters and spaces.');
+      return;
+    }
+
+    // Validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(form.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
 
     if (!acceptTerms) {
       setError('Please accept the terms and conditions to continue.');
@@ -133,6 +86,13 @@ export default function Register() {
     }
 
     setIsLoading(true);
+
+    if (!isStrongPassword(form.password)) {
+      setError(
+        'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.'
+      );
+      return;
+    }
 
     try {
       const res = await API.post('/auth/register', form);
@@ -265,6 +225,8 @@ export default function Register() {
                 <input
                   type="text"
                   name="name"
+                  pattern="[A-Za-z\s]+"
+                  minLength={2}
                   placeholder="Enter your full name"
                   value={form.name}
                   onChange={handleChange}
@@ -362,20 +324,11 @@ export default function Register() {
             <button
               type="submit"
               onClick={handleSubmit}
-              disabled={isLoading || !acceptTerms}
+              disabled={!acceptTerms}
               className="group w-full bg-gradient-to-r from-blue-600 to-purple-800 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-5 transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              {isLoading ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Creating Account...</span>
-                </>
-              ) : (
-                <>
-                  <span>Create Account</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
+              <span>Create Account</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
 

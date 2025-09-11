@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { 
-  Mail, 
-  ArrowRight, 
-  ArrowLeft, 
-  CheckCircle, 
-  AlertCircle, 
+import {
+  Mail,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle,
+  AlertCircle,
   GraduationCap,
   Key,
-  Send
+  Send,
 } from 'lucide-react';
 
 const ForgotPassword = () => {
@@ -22,18 +22,34 @@ const ForgotPassword = () => {
     setLoading(true);
     setError('');
     setMessage('');
-    
+
+    // Check for empty fields
+    if (!email) {
+      setError('Your Email is required.');
+      return;
+    }
+
+    // Validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-      
+      const response = await fetch(
+        'http://localhost:5000/api/auth/forgot-password',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setMessage(data.message);
         setIsEmailSent(true);
@@ -75,7 +91,6 @@ const ForgotPassword = () => {
       <div className="relative z-10 w-full max-w-md">
         {/* Main forgot password card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 animate-in fade-in-50 slide-in-from-bottom-8 duration-1000">
-          
           {!isEmailSent ? (
             <>
               {/* Header */}
@@ -125,21 +140,10 @@ const ForgotPassword = () => {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  disabled={loading}
                   className="group w-full bg-gradient-to-r from-blue-600 to-purple-800 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  {loading ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Sending...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      <span>Send Reset Link</span>
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
+                  <span>Send Reset Link</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
 
@@ -170,7 +174,7 @@ const ForgotPassword = () => {
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
                   <p className="text-blue-800 font-semibold">{email}</p>
                 </div>
-                
+
                 {message && (
                   <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -179,14 +183,15 @@ const ForgotPassword = () => {
                 )}
 
                 <p className="text-sm text-gray-500 mb-8">
-                  Didn't receive the email? Check your spam folder or try again with a different email address.
+                  Didn't receive the email? Check your spam folder or try again
+                  with a different email address.
                 </p>
 
                 {/* Action buttons */}
                 <div className="space-y-3">
                   <button
                     onClick={handleBackToLogin}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-blue-700 to-purple-800 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Try Another Email
                   </button>
@@ -239,9 +244,16 @@ const ForgotPassword = () => {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-10px) rotate(120deg); }
-          66% { transform: translateY(5px) rotate(240deg); }
+          0%,
+          100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          33% {
+            transform: translateY(-10px) rotate(120deg);
+          }
+          66% {
+            transform: translateY(5px) rotate(240deg);
+          }
         }
         .animate-float {
           animation: float 6s ease-in-out infinite;
