@@ -1,6 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const sendEmail = require('../utils/sendEmail');
+const ClassSession = require('../models/ClassSession');
+const Course = require('../models/Course');
+const Commission = require('../models/Commission');
 
 // List pending tutors
 exports.getPendingTutors = asyncHandler(async (req, res) => {
@@ -34,4 +37,60 @@ exports.reviewTutor = asyncHandler(async (req, res) => {
   await sendEmail(tutor.email, subject, text);
 
   res.json({ message: `Tutor ${action}d.` });
+});
+
+// =============
+exports.getAllCounts = asyncHandler(async (req, res) => {
+  const tutorCount = await User.countDocuments({ role: 'tutor' });
+  const pendingTutorCount = await User.countDocuments({
+    role: 'tutor',
+    verificationStatus: 'pending',
+  });
+  const studentCount = await User.countDocuments({ role: 'student' });
+  const classCount = await ClassSession.countDocuments();
+  const revenueResult = await Commission.aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: '$amount' },
+      },
+    },
+  ]);
+
+  const totalRevenue = revenueResult.length > 0 ? revenueResult[0].total : 0;
+
+  res.json({ tutorCount, studentCount, classCount, pendingTutorCount, totalRevenue });
+});
+
+
+
+exports.getAllCourses = asyncHandler(async (req, res) => {
+  const courses = await Course.find().populate('tutor', 'name');
+
+  res.status(200).json({
+    success: true,
+    count: courses.length,
+    data: courses,
+  });
+});
+
+
+exports.getAllStudents = asyncHandler(async (req, res) => {
+  const students = await User.find({ role: 'student' }).select('-password');
+
+  res.status(200).json({
+    success: true,
+    count: students.length,
+    data: students,
+  });
+});
+
+exports.getAllTutors = asyncHandler(async (req, res) => {
+  const tutors = await User.find({ role: 'tutor' }).select('-password');
+
+  res.status(200).json({
+    success: true,
+    count: tutors.length,
+    data: tutors,
+  });
 });

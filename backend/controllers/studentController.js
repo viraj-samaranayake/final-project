@@ -111,8 +111,8 @@ exports.createPayment = async (req, res) => {
 
   const tutor = course.tutor;
   const amount = course.price;
-  const tutorShare = amount * 0.95;
-  const systemShare = amount * 0.05;
+  const tutorShare = amount * 0.85;
+  const systemShare = amount * 0.15;
 
   const payment = await Payment.create({
     student,

@@ -5,28 +5,75 @@ const sendEmail = require('../utils/sendEmail');
 // Submit verification details + files
 exports.submitVerification = asyncHandler(async (req, res) => {
   const tutor = req.user;
-  if (tutor.role !== 'tutor') return res.status(403).json({ message: 'Forbidden' });
+  if (tutor.role !== 'tutor')
+    return res.status(403).json({ message: 'Forbidden' });
 
   const {
-    nic, phone, dob, gender, country, address,
-    highestQualification, university, experienceYears, subjects, languages
+    nic,
+    phone,
+    dob,
+    gender,
+    country,
+    address,
+    highestQualification,
+    university,
+    experienceYears,
+    subjects,
+    languages,
   } = req.body;
 
-  if (!nic || !phone || !dob || !gender || !country ||
-      !address || !highestQualification || !university ||
-      !experienceYears || !subjects || !languages)
-    return res.status(400).json({ message: 'All fields except profileImage are required' });
+  if (
+    !nic ||
+    !phone ||
+    !dob ||
+    !gender ||
+    !country ||
+    !address ||
+    !highestQualification ||
+    !university ||
+    !experienceYears ||
+    !subjects ||
+    !languages
+  )
+    return res
+      .status(400)
+      .json({ message: 'All fields except profileImage are required' });
 
-  if (!req.files['qualificationFiles'] || req.files['qualificationFiles'].length < 1)
-    return res.status(400).json({ message: 'At least one qualification file required' });
+  if (
+    !req.files['qualificationFiles'] ||
+    req.files['qualificationFiles'].length < 1
+  )
+    return res
+      .status(400)
+      .json({ message: 'At least one qualification file required' });
+
+  // Check if NIC already exists
+  const existingNIC = await User.findOne({
+    nic,
+    _id: { $ne: tutor._id }, 
+    role: 'tutor',
+  });
+
+  if (existingNIC) {
+    return res
+      .status(409)
+      .json({ message: 'NIC already in use by another tutor' });
+  }
 
   // Map file paths (Cloudinary gives req.files[].path)
   const profileImage = req.files['profileImage']?.[0]?.path;
-  const qualificationFiles = req.files['qualificationFiles'].map(f => f.path);
+  const qualificationFiles = req.files['qualificationFiles'].map((f) => f.path);
 
   Object.assign(tutor, {
-    nic, phone, dob, gender, country, address,
-    highestQualification, university, experienceYears,
+    nic,
+    phone,
+    dob,
+    gender,
+    country,
+    address,
+    highestQualification,
+    university,
+    experienceYears,
     subjects: JSON.parse(subjects),
     languages: JSON.parse(languages),
     profileImage,
@@ -42,10 +89,12 @@ exports.submitVerification = asyncHandler(async (req, res) => {
 // Tutor dashboard info
 exports.getTutorDashboard = asyncHandler(async (req, res) => {
   const tutor = req.user;
-  if (tutor.role !== 'tutor') return res.status(403).json({ message: 'Forbidden' });
+  if (tutor.role !== 'tutor')
+    return res.status(403).json({ message: 'Forbidden' });
 
   res.json({
     verificationStatus: tutor.verificationStatus,
-    message: tutor.verificationStatus === 'pending' ? 'Awaiting approval' : null,
+    message:
+      tutor.verificationStatus === 'pending' ? 'Awaiting approval' : null,
   });
 });
