@@ -34,7 +34,7 @@ const FeaturesSection = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16 animate-in fade-in-50 slide-in-from-bottom-4 duration-1000">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Why Choose <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">EduConnect?</span>
+            Why Choose <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">LearnCey?</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             We're revolutionizing education in Sri Lanka with cutting-edge technology and personalized learning experiences.

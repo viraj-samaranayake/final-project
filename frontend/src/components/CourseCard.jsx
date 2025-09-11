@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import API from '../api';
-import RatingStars from 'react-rating-stars-component';
 
 const CourseCard = ({ course }) => {
   const [docs, setDocs] = useState([]);

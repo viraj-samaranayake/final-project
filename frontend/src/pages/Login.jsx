@@ -1,64 +1,3 @@
-// import { useState } from 'react';
-// import API from '../api';
-// import { useNavigate } from 'react-router-dom';
-// import useAuth from '../context/useAuth';
-
-// export default function Login() {
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-
-//   const [form, setForm] = useState({ email: '', password: '' });
-//   const [error, setError] = useState('');
-
-//   const handleChange = (e) =>
-//     setForm({ ...form, [e.target.name]: e.target.value });
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError('');
-//     try {
-//       const res = await API.post('/auth/login', form);
-//       login(res.data);
-//       navigate(/${res.data.role});
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Login failed');
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-md mx-auto p-6">
-//       <h2 className="text-2xl font-bold mb-4">Login</h2>
-//       {error && <p className="text-red-500">{error}</p>}
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <input
-//           type="email"
-//           name="email"
-//           placeholder="Email"
-//           value={form.email}
-//           onChange={handleChange}
-//           required
-//           className="w-full p-2 border rounded"
-//         />
-//         <input
-//           type="password"
-//           name="password"
-//           placeholder="Password"
-//           value={form.password}
-//           onChange={handleChange}
-//           required
-//           className="w-full p-2 border rounded"
-//         />
-//         <button
-//           type="submit"
-//           className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-//         >
-//           Login
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
 import { useState } from 'react';
 import API from '../api';
 import { useNavigate } from 'react-router-dom';
@@ -93,6 +32,20 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Check for empty fields
+    if (!form.email || !form.password) {
+      setError('All fields are required.');
+      return;
+    }
+
+    // Validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(form.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     try {
       const res = await API.post('/auth/login', form);
       login(res.data);
@@ -121,11 +74,7 @@ export default function Login() {
           <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
             <GraduationCap className="w-5 h-5 text-white" />
           </div>
-<<<<<<< HEAD
-          <span className="font-medium">EduConnect</span>
-=======
           <span className="font-medium">LearnCey</span>
->>>>>>> feature/all-features
         </a>
       </div>
 
@@ -162,7 +111,7 @@ export default function Login() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="w-5 h-5 text-gray-400" />
+                  <Mail className="w-5 h-5 text-gray-600" />
                 </div>
                 <input
                   type="email"
@@ -183,7 +132,7 @@ export default function Login() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="w-5 h-5 text-gray-400" />
+                  <Lock className="w-5 h-5 text-gray-600" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -232,11 +181,7 @@ export default function Login() {
               type="submit"
               onClick={handleSubmit}
               disabled={isLoading}
-<<<<<<< HEAD
-              className="group w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
-=======
               className="group w-full bg-gradient-to-r from-blue-600 to-purple-800 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-5 transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
->>>>>>> feature/all-features
             >
               {isLoading ? (
                 <>
@@ -245,7 +190,7 @@ export default function Login() {
                 </>
               ) : (
                 <>
-                  <span>Sign In</span>
+                  <span>Sign in</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </>
               )}

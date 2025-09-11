@@ -13,6 +13,7 @@ import TutorDashboard from './pages/tutor/TutorDashboard';
 import Home from './pages/Home';
 import Spinner from './components/Spinner';
 import PendingTutors from './pages/admin/PendingTutors';
+import Courses from './pages/admin/Courses';
 import AddCourse from './pages/tutor/AddCourse';
 import ViewEarnings from './pages/tutor/ViewEarnings';
 import EngagedStudents from './pages/tutor/EngagedStudents';
@@ -26,9 +27,12 @@ import StudentCourseDetail from './pages/student/StudentCourseDetail';
 import PurchasedCourses from './pages/student/PurchasedCourses';
 import EditTutorProfile from './pages/tutor/EditTutorProfile';
 import ScheduleClass from './pages/tutor/ScheduleClass';
-import TutorClasses from './pages/tutor/TutorClasses'; 
+import TutorClasses from './pages/tutor/TutorClasses';
+import Reports from './pages/admin/Reports';
+import AdminStudents from './pages/admin/AdminStudents';
+import AdminTutors from './pages/admin/AdminTutors';
+import MonthlyRevenueReport from './pages/admin/MonthlyRevenueReport';
 //import ClassRoom from './pages/tutor/ClassRoom';
-
 
 const PrivateRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
@@ -70,6 +74,46 @@ function App() {
             element={
               <PrivateRoute allowedRoles={['admin']}>
                 <PendingTutors />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/all-courses"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <Courses />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/reports"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <Reports />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/students"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <AdminStudents />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/tutors"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <AdminTutors />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/reports/monthly-revenue"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <MonthlyRevenueReport />
               </PrivateRoute>
             }
           />
@@ -204,7 +248,6 @@ function App() {
               </PrivateRoute>
             }
           /> */}
-
         </Routes>
       </BrowserRouter>
     </AuthProvider>

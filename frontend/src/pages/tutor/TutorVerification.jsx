@@ -67,162 +67,8 @@ const TutorVerification = () => {
     }
   };
 
-  // return (
-  //   <div className="max-w-2xl mx-auto px-6 py-10 bg-white shadow-md rounded-md">
-  //     <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-  //       Tutor Verification Form
-  //     </h2>
-
-  //     {error && (
-  //       <p className="text-red-600 mb-4 text-sm text-center">{error}</p>
-  //     )}
-
-  //     <form
-  //       onSubmit={handleSubmit}
-  //       encType="multipart/form-data"
-  //       className="space-y-5"
-  //     >
-  //       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-  //         <input
-  //           type="text"
-  //           name="nic"
-  //           placeholder="NIC"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="phone"
-  //           placeholder="Phone"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="date"
-  //           name="dob"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="gender"
-  //           placeholder="Gender"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="country"
-  //           placeholder="Country"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="address"
-  //           placeholder="Address"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="highestQualification"
-  //           placeholder="Highest Qualification"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="university"
-  //           placeholder="University"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="number"
-  //           name="experienceYears"
-  //           placeholder="Experience (years)"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="subjects"
-  //           placeholder="Subjects (comma separated)"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //         <input
-  //           type="text"
-  //           name="languages"
-  //           placeholder="Languages (comma separated)"
-  //           onChange={handleChange}
-  //           required
-  //           className="input-field"
-  //         />
-  //       </div>
-
-  //       <div>
-  //         <label className="block mb-1 text-sm font-medium text-gray-700">
-  //           Profile Image (optional):
-  //         </label>
-  //         <input
-  //           type="file"
-  //           name="profileImage"
-  //           accept="image/*"
-  //           onChange={handleChange}
-  //           className="file-input"
-  //         />
-  //       </div>
-
-  //       <div>
-  //         <label className="block mb-1 text-sm font-medium text-gray-700">
-  //           Qualification Files (1–5):
-  //         </label>
-  //         <input
-  //           type="file"
-  //           name="qualificationFiles"
-  //           multiple
-  //           accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-  //           onChange={handleChange}
-  //           required
-  //           className="file-input"
-  //         />
-  //       </div>
-
-  //       <button
-  //         type="submit"
-  //         disabled={loading}
-  //         className={`w-full py-2 px-4 rounded-md text-white font-semibold transition ${
-  //           loading
-  //             ? 'bg-gray-400 cursor-not-allowed'
-  //             : 'bg-blue-600 hover:bg-blue-700'
-  //         }`}
-  //       >
-  //         {loading ? 'Submitting...' : 'Submit Verification'}
-  //       </button>
-  //     </form>
-  //   </div>
-  // );
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-start py-12 px-4 relative overflow-hidden">
-      <FloatingParticles />
-
-      {/* decorative orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-r from-pink-400 to-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
-
       {/* back link */}
       <div className="absolute top-6 left-6 z-20">
         <a
@@ -253,7 +99,9 @@ const TutorVerification = () => {
               <input
                 type="text"
                 name="nic"
-                placeholder="NIC"
+                pattern="^(\d{9}[VXvx]|\d{12})$"
+                maxlength="12"
+                placeholder="NIC/ID number"
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
@@ -261,6 +109,10 @@ const TutorVerification = () => {
               <input
                 type="text"
                 name="phone"
+                pattern="\d{10}"
+                minlength="10"
+                maxlength="10"
+                inputmode="numeric"
                 placeholder="Phone"
                 onChange={handleChange}
                 required
@@ -270,6 +122,7 @@ const TutorVerification = () => {
                 type="date"
                 name="dob"
                 onChange={handleChange}
+                placeholder="DOB"
                 required
                 className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
               />
@@ -297,6 +150,7 @@ const TutorVerification = () => {
               <input
                 type="text"
                 name="country"
+                pattern="^[A-Za-z ]+$"
                 placeholder="Country"
                 onChange={handleChange}
                 required
@@ -321,6 +175,7 @@ const TutorVerification = () => {
               <input
                 type="text"
                 name="university"
+                pattern="^[A-Za-z]+$"
                 placeholder="University"
                 onChange={handleChange}
                 required

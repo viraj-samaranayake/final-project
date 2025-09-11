@@ -13,6 +13,8 @@ import {
   Star,
   ViewIcon,
   View,
+  Hourglass,
+  HourglassIcon,
 } from 'lucide-react';
 import ChatBotAssistant from '../../components/ChatBotAssistant';
 
@@ -58,11 +60,11 @@ const TutorDashboard = () => {
 
       <div className="relative z-10 w-full max-w-md">
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 text-center">
-          <div className="inline-flex p-4 bg-gradient-to-br from-amber-300 to-orange-400 rounded-2xl mb-4">
+          <div className="inline-flex p-4 bg-gradient-to-br from-blue-700 to-purple-800 rounded-2xl mb-4">
             <span className="text-3xl">{emoji}</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">{title}</h1>
-          <p className="text-lg font-semibold text-amber-700 mb-6">{message}</p>
+          <p className="text-lg font-semibold text-green-700 mb-6">{message}</p>
           <LogoutButton />
         </div>
       </div>
@@ -73,7 +75,7 @@ const TutorDashboard = () => {
   if (status === 'pending')
     return (
       <StatusCard
-        emoji="⏳"
+        emoji='⏳'
         title="Verification Pending"
         message="Your verification is under review. Please wait for admin approval."
       />
