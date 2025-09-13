@@ -1,14 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import API from '../../api';
 import { ArrowLeft, Download } from 'lucide-react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const MonthlyRevenueReport = () => {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [report, setReport] = useState([]);
   const [loading, setLoading] = useState(true);
+  const reportRef = useRef();
 
   useEffect(() => {
     fetchReport(year);
@@ -25,8 +28,28 @@ const MonthlyRevenueReport = () => {
     setLoading(false);
   };
 
-  const handleDownload = () => {
-    window.open(`/admin/reports/monthly-revenue/download?year=${year}`, '_blank');
+  const handleDownload = async () => {
+    const input = reportRef.current;
+    if (!input) return;
+
+    const canvas = await html2canvas(input, {
+      scale: 2, // Higher scale for better quality
+      useCORS: true,
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'px',
+      format: 'a4',
+    });
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const imgProps = pdf.getImageProperties(imgData);
+    const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+    pdf.save(`monthly-revenue-report-${year}.pdf`);
   };
 
   const chartData = {
@@ -45,13 +68,9 @@ const MonthlyRevenueReport = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 relative overflow-hidden">
-      {/* Orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-r from-pink-400 to-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
-
       {/* Back link */}
       <div className="absolute top-6 left-6 z-20">
-        <a href="/admin/reports" className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors group">
+        <a href="/admin" className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors group">
           <ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Back to Reports</span>
         </a>
@@ -65,10 +84,10 @@ const MonthlyRevenueReport = () => {
             </h1>
             <button
               onClick={handleDownload}
-              className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:shadow-md"
+              className="flex items-center bg-gradient-to-r from-blue-700 to-purple-900 text-white px-4 py-2 rounded-lg hover:shadow-md"
             >
               <Download className="w-4 h-4 mr-2" />
-              Download CSV
+              Download pdf
             </button>
           </div>
 
@@ -90,11 +109,12 @@ const MonthlyRevenueReport = () => {
             <p className="text-center text-gray-500">Loading...</p>
           ) : (
             <>
+              <div ref={reportRef}>
               <Line data={chartData} />
 
               <div className="mt-10 overflow-x-auto">
                 <table className="min-w-full border text-sm text-left">
-                  <thead className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                  <thead className="bg-gradient-to-r from-blue-700 to-purple-800 text-white">
                     <tr>
                       <th className="py-2 px-4">Month</th>
                       <th className="py-2 px-4">Revenue (LKR)</th>
@@ -103,7 +123,7 @@ const MonthlyRevenueReport = () => {
                   </thead>
                   <tbody>
                     {report.map((row, i) => (
-                      <tr key={i} className="border-t">
+                      <tr key={i} className="border-t text-gray-800">
                         <td className="py-2 px-4">{row.month}</td>
                         <td className="py-2 px-4">{row.revenue.toLocaleString()}</td>
                         <td className="py-2 px-4">{row.payments}</td>
@@ -111,6 +131,7 @@ const MonthlyRevenueReport = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
               </div>
             </>
           )}

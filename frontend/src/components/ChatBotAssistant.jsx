@@ -28,7 +28,7 @@ export default function ChatBotAssistant({ role = 'student' }) {
 
   return (
     <div className="fixed bottom-4 right-4 w-[300px] bg-white border rounded-lg shadow-lg">
-      <div className="h-64 overflow-y-auto p-2">
+      <div className="h-36 overflow-y-auto p-2">
         {messages.map((msg, idx) => (
           <div key={idx} className={`mb-2 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
             <span className={`inline-block p-2 rounded ${msg.sender === 'user' ? 'bg-blue-100' : 'bg-gray-200'}`}>

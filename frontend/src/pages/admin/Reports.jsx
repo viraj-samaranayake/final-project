@@ -39,7 +39,7 @@ const Reports = () => {
       <main className="relative z-10 max-w-4xl mx-auto pt-24 pb-10">
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8">
           <h1 className="text-3xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-8">
-            Admin Reports
+            View Status
           </h1>
 
           {loading ? (

@@ -106,16 +106,6 @@
 
 // export default StudentVerificationForm;
 
-
-
-
-
-
-
-
-
-
-
 import { useState } from 'react';
 import API from '../../api';
 import { useNavigate } from 'react-router-dom';
@@ -213,7 +203,9 @@ const StudentVerificationForm = () => {
                 type="text"
                 name="phone"
                 value={form.phone}
-                maxLength="10"
+                minlength="10"
+                maxlength="10"
+                inputmode="numeric"
                 required
                 onChange={handleChange}
                 pattern="\d{10}"
@@ -299,7 +291,9 @@ const StudentVerificationForm = () => {
                 onChange={handleChange}
                 className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition"
               />
-              <p className="text-xs text-gray-500 mt-1">Max size: 5MB | Image formats only</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Max size: 5MB | Image formats only
+              </p>
             </div>
 
             <button

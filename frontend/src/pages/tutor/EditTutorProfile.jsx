@@ -94,7 +94,7 @@ const EditTutorProfile = () => {
       <main className="relative z-10 max-w-md mx-auto pt-24 pb-10">
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8">
           <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-6 text-center">
-            Edit Tutor Profile
+            Update Profile
           </h2>
 
           {message && (
@@ -118,6 +118,11 @@ const EditTutorProfile = () => {
               <input
                 type="text"
                 name="phone"
+                pattern="\d{10}"
+                minlength="10"
+                maxlength="10"
+                inputmode="numeric"
+                title="Enter a 10-digit phone number"
                 value={form.phone}
                 onChange={onChange}
                 className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"

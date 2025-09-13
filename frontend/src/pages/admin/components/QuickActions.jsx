@@ -22,7 +22,7 @@ const QuickActions = () => {
       gradient: 'from-green-500 to-emerald-500',
     },
     {
-      name: 'View Reports',
+      name: 'View Status',
       link: '/admin/reports',
       icon: BarChart,
       gradient: 'from-purple-500 to-pink-500',

@@ -24,13 +24,13 @@ export default function AdminDashboard() {
         <StatsCards />
 
         {/* Charts Section */}
-        <ChartsSection />
+        {/* <ChartsSection /> */}
 
         {/* Bottom Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Activities */}
           <div className="lg:col-span-2">
-            <RecentActivities />
+            {/* <RecentActivities /> */}
           </div>
           {/* Quick Actions */}
           <div>

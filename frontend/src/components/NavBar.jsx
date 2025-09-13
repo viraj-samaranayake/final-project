@@ -71,16 +71,16 @@ const NavBar = () => {
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <a href={'/'} className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               LearnCey
-            </span>
+            </a>
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            {['Features', 'Pricing', 'About', 'Contact'].map((item) => (
+            {['Features', 'Courses', 'About', 'Contact'].map((item) => (
               <a
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                href={`/${item.toLowerCase()}`}
                 className="text-gray-700 hover:text-blue-600 font-medium transition-colors hover:-translate-y-0.5 transform duration-200"
               >
                 {item}

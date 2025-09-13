@@ -75,7 +75,7 @@ const TutorDashboard = () => {
   if (status === 'pending')
     return (
       <StatusCard
-        emoji='⏳'
+        emoji="⏳"
         title="Verification Pending"
         message="Your verification is under review. Please wait for admin approval."
       />
@@ -127,7 +127,7 @@ const TutorDashboard = () => {
       label: 'My Classes',
       path: '/tutor/my-classes',
       icon: <ViewIcon className="w-8 h-8 text-yellow-500" />,
-    }
+    },
   ];
 
   return (
@@ -139,7 +139,7 @@ const TutorDashboard = () => {
       <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-r from-pink-400 to-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
 
       {/* back link */}
-      <div className="absolute top-6 left-6 z-20">
+      {/* <div className="absolute top-6 left-6 z-20">
         <a
           href="/"
           className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors group"
@@ -152,6 +152,21 @@ const TutorDashboard = () => {
         <div className="absolute top-12 right-6 z-20">
           <LogoutButton />
         </div>
+      </div> */}
+      <div className="absolute top-6 left-6 right-6 z-20 flex items-center justify-between">
+        {/* Left side – brand */}
+        <a
+          href="/"
+          className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors group"
+        >
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+            <GraduationCap className="w-5 h-5 text-white" />
+          </div>
+          <span className="font-medium">LearnCey</span>
+        </a>
+
+        {/* Right side – logout */}
+        <LogoutButton />
       </div>
 
       {/* main content */}

@@ -14,7 +14,7 @@ const PageHeader = () => {
             Monitor and manage your educational platform
           </p>
         </div>
-        <div className="mt-4 md:mt-0 flex items-center space-x-3">
+        {/* <div className="mt-4 md:mt-0 flex items-center space-x-3">
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
@@ -29,7 +29,7 @@ const PageHeader = () => {
             <Calendar className="w-4 h-4" />
             <span>Schedule Report</span>
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

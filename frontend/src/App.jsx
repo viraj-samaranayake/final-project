@@ -32,6 +32,7 @@ import Reports from './pages/admin/Reports';
 import AdminStudents from './pages/admin/AdminStudents';
 import AdminTutors from './pages/admin/AdminTutors';
 import MonthlyRevenueReport from './pages/admin/MonthlyRevenueReport';
+import CourseList from './pages/CourseList';
 //import ClassRoom from './pages/tutor/ClassRoom';
 
 const PrivateRoute = ({ children, allowedRoles }) => {
@@ -51,6 +52,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/courses" element={<CourseList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
