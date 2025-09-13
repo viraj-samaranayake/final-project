@@ -28,6 +28,7 @@ router.get('/tutors', getAllTutors);
 router.get('/students', getAllStudents);
 
 // Monthly Revenue Report
+router.get('/reports', getAllCounts);
 router.get('/reports/monthly-revenue', reportController.getMonthlyRevenue);
 router.get('/reports/monthly-revenue/download', reportController.downloadMonthlyRevenueCSV);
 

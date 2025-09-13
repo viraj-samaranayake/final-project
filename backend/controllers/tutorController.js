@@ -10,8 +10,6 @@ const sendEmail = require('../utils/sendEmail');
 const { v4: uuidv4 } = require('uuid');
 const ClassSession = require('../models/ClassSession');
 
-
-
 exports.getTutorSubjects = async (req, res) => {
   try {
     const tutor = await User.findById(req.user._id);
@@ -35,17 +33,18 @@ exports.getTutorSubjects = async (req, res) => {
   }
 };
 
-
-
 exports.uploadCourse = async (req, res) => {
   try {
     const { title, description, price, subjects } = req.body;
 
     if (!title || !subjects) {
-      return res.status(400).json({ message: 'Title and subjects are required' });
+      return res
+        .status(400)
+        .json({ message: 'Title and subjects are required' });
     }
 
-    const parsedSubjects = typeof subjects === 'string' ? JSON.parse(subjects) : subjects;
+    const parsedSubjects =
+      typeof subjects === 'string' ? JSON.parse(subjects) : subjects;
 
     const courseData = {
       tutor: req.user._id,
@@ -96,16 +95,18 @@ exports.uploadCourse = async (req, res) => {
     res.status(201).json({ message: 'Course uploaded successfully', course });
   } catch (error) {
     console.error('Upload Course Error:', error);
-    res.status(500).json({ message: 'Failed to upload course', error: error.message });
+    res
+      .status(500)
+      .json({ message: 'Failed to upload course', error: error.message });
   }
 };
-
-
 
 exports.getTutorCourses = async (req, res) => {
   try {
     const tutorId = req.user._id;
-    const courses = await Course.find({ tutor: tutorId }).sort({ createdAt: -1 });
+    const courses = await Course.find({ tutor: tutorId }).sort({
+      createdAt: -1,
+    });
     res.json(courses);
   } catch (error) {
     console.error('getTutorCourses error:', error);
@@ -118,7 +119,9 @@ exports.getCourseById = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     if (!course || course.tutor.toString() !== req.user._id.toString()) {
-      return res.status(404).json({ message: 'Course not found or access denied' });
+      return res
+        .status(404)
+        .json({ message: 'Course not found or access denied' });
     }
     res.json(course);
   } catch (err) {
@@ -134,7 +137,9 @@ exports.updateCourse = async (req, res) => {
 
     const course = await Course.findById(req.params.id);
     if (!course || course.tutor.toString() !== req.user._id.toString()) {
-      return res.status(404).json({ message: 'Course not found or access denied' });
+      return res
+        .status(404)
+        .json({ message: 'Course not found or access denied' });
     }
 
     if (title) course.title = title;
@@ -142,9 +147,12 @@ exports.updateCourse = async (req, res) => {
 
     //Update thumbnail if present
     if (req.files?.thumbnailImage?.[0]) {
-      const result = await cloudinary.uploader.upload(req.files.thumbnailImage[0].path, {
-        folder: 'courses/thumbnails',
-      });
+      const result = await cloudinary.uploader.upload(
+        req.files.thumbnailImage[0].path,
+        {
+          folder: 'courses/thumbnails',
+        }
+      );
       course.thumbnailImage = result.secure_url;
     }
 
@@ -169,27 +177,28 @@ exports.updateCourse = async (req, res) => {
   }
 };
 
-
 // Returns total earnings per course for logged-in tutor
 exports.getTutorEarnings = async (req, res) => {
   const tutorId = req.user._id;
 
   // Fetch courses by this tutor
-  const courses = await Course.find({ tutor: tutorId }).select('_id title price');
+  const courses = await Course.find({ tutor: tutorId }).select(
+    '_id title price'
+  );
 
   // Aggregate enrollments to count how many per course
   const enrollCounts = await Enrollment.aggregate([
-    { $match: { course: { $in: courses.map(c => c._id) } } },
+    { $match: { course: { $in: courses.map((c) => c._id) } } },
     { $group: { _id: '$course', count: { $sum: 1 } } },
   ]);
 
   const countMap = {};
-  enrollCounts.forEach(ec => {
+  enrollCounts.forEach((ec) => {
     countMap[ec._id.toString()] = ec.count;
   });
 
   // Combine into response
-  const earnings = courses.map(c => {
+  const earnings = courses.map((c) => {
     const count = countMap[c._id.toString()] || 0;
     const total = count * c.price;
     return { courseId: c._id, title: c.title, totalEarning: total };
@@ -198,15 +207,13 @@ exports.getTutorEarnings = async (req, res) => {
   res.json(earnings);
 };
 
-
-
 // Get engaged students count and avg rating per course
 exports.getEngagedStudentsData = async (req, res) => {
   const tutorId = req.user._id;
 
   const courses = await Course.find({ tutor: tutorId }).select('_id title');
 
-  const courseIds = courses.map(c => c._id);
+  const courseIds = courses.map((c) => c._id);
 
   // Count enrollments per course
   const enrollAgg = await Enrollment.aggregate([
@@ -221,12 +228,12 @@ exports.getEngagedStudentsData = async (req, res) => {
   ]);
 
   const enrollMap = {};
-  enrollAgg.forEach(e => enrollMap[e._id.toString()] = e.count);
+  enrollAgg.forEach((e) => (enrollMap[e._id.toString()] = e.count));
 
   const ratingMap = {};
-  ratingAgg.forEach(r => ratingMap[r._id.toString()] = r.avgStars);
+  ratingAgg.forEach((r) => (ratingMap[r._id.toString()] = r.avgStars));
 
-  const data = courses.map(c => ({
+  const data = courses.map((c) => ({
     courseId: c._id,
     title: c.title,
     engagedCount: enrollMap[c._id.toString()] || 0,
@@ -235,7 +242,6 @@ exports.getEngagedStudentsData = async (req, res) => {
 
   res.json(data);
 };
-
 
 // PUT /api/tutor/edit-profile
 exports.editTutorProfile = async (req, res) => {
@@ -252,7 +258,7 @@ exports.editTutorProfile = async (req, res) => {
     if (languages) {
       user.languages = Array.isArray(languages)
         ? languages
-        : languages.split(',').map(l => l.trim());
+        : languages.split(',').map((l) => l.trim());
     }
 
     if (req.file?.path) {
@@ -261,7 +267,8 @@ exports.editTutorProfile = async (req, res) => {
 
     if (currentPassword && newPassword) {
       const isMatch = await bcrypt.compare(currentPassword, user.password);
-      if (!isMatch) return res.status(400).json({ message: 'Incorrect current password' });
+      if (!isMatch)
+        return res.status(400).json({ message: 'Incorrect current password' });
 
       user.password = await bcrypt.hash(newPassword, 10);
     }
@@ -275,7 +282,7 @@ exports.editTutorProfile = async (req, res) => {
         phone: user.phone,
         languages: user.languages,
         profileImage: user.profileImage,
-      }
+      },
     });
   } catch (err) {
     console.error('Edit tutor profile error:', err);
@@ -283,10 +290,7 @@ exports.editTutorProfile = async (req, res) => {
   }
 };
 
-
-
-
- //---===---------------------===========-------------=======--------
+//---===---------------------===========-------------=======--------
 
 exports.scheduleClass = async (req, res) => {
   const { title, course, scheduledAt, price } = req.body;
@@ -305,11 +309,11 @@ exports.scheduleClass = async (req, res) => {
   if (course) {
     const enrollments = await Enrollment.find({ course });
     const studentEmails = await User.find(
-      { _id: { $in: enrollments.map(e => e.student) } },
+      { _id: { $in: enrollments.map((e) => e.student) } },
       'email'
     );
 
-    const emailPromises = studentEmails.map(student =>
+    const emailPromises = studentEmails.map((student) =>
       sendEmail(
         student.email,
         'New Class Scheduled',
@@ -323,8 +327,6 @@ exports.scheduleClass = async (req, res) => {
   res.json(session);
 };
 
-
-
 exports.getTutorClasses = async (req, res) => {
   const classes = await ClassSession.find({ tutor: req.user._id });
   res.json(classes);
@@ -336,13 +338,27 @@ exports.getSession = async (req, res) => {
 
   if (req.user.role === 'student') {
     if (session.course) {
-      const enrolled = await Enrollment.findOne({ student: req.user._id, course: session.course });
-      if (!enrolled) return res.status(403).json({ message: 'Not enrolled in the related course' });
+      const enrolled = await Enrollment.findOne({
+        student: req.user._id,
+        course: session.course,
+      });
+      if (!enrolled)
+        return res
+          .status(403)
+          .json({ message: 'Not enrolled in the related course' });
     } else {
-      const purchased = await ClassPurchase.findOne({ student: req.user._id, classSession: session._id });
-      if (!purchased) return res.status(403).json({ message: 'Class not purchased' });
+      const purchased = await ClassPurchase.findOne({
+        student: req.user._id,
+        classSession: session._id,
+      });
+      if (!purchased)
+        return res.status(403).json({ message: 'Class not purchased' });
     }
   }
 
-  res.json({ roomId: session.roomId, title: session.title, scheduledAt: session.scheduledAt });
+  res.json({
+    roomId: session.roomId,
+    title: session.title,
+    scheduledAt: session.scheduledAt,
+  });
 };
