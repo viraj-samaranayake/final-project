@@ -68,7 +68,7 @@ A modern and feature-rich **Online Learning Platform** built using the **MERN St
 
 ---
 
-## 📸 Screenshots (Optional)
+## 📸 Screenshots
 
 <img width="1904" height="907" alt="Screenshot 2025-09-07 013552" src="https://github.com/user-attachments/assets/5e8e4e69-5dfe-4879-ab77-93846c6eb552" />
 <img width="1901" height="906" alt="Screenshot 2025-09-07 015019" src="https://github.com/user-attachments/assets/eef5b190-2ac9-4cee-9da7-9007b366c74d" />
